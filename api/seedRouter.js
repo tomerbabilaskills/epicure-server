@@ -32,30 +32,30 @@ const mockData = {
   restaurants: [
     {
       name: 'Claro',
-      imgSrc: '../../assets/images/restaurants/claro.jpg',
+      imgUrl: '../../assets/images/restaurants/claro.jpg',
       isPopular: true,
     },
     {
       name: 'Lumina',
-      imgSrc: '../../assets/images/restaurants/mizlala-gret-mullet-fillet.jpg',
+      imgUrl: '../../assets/images/restaurants/mizlala-gret-mullet-fillet.jpg',
       isPopular: true,
     },
     {
       name: 'Tiger Lilly',
-      imgSrc: '../../assets/images/restaurants/tiger-lili.jpg',
+      imgUrl: '../../assets/images/restaurants/tiger-lili.jpg',
       isPopular: true,
     },
     {
       name: 'Ozna',
-      imgSrc: '../../../assets/images/restaurants/ozna.jpg',
+      imgUrl: '../../../assets/images/restaurants/ozna.jpg',
     },
     {
       name: 'Kitchen Market',
-      imgSrc: '../../../assets/images/restaurants/kitchen-market.jpg',
+      imgUrl: '../../../assets/images/restaurants/kitchen-market.jpg',
     },
     {
       name: 'Mashya',
-      imgSrc: '../../../assets/images/restaurants/mashya.jpg',
+      imgUrl: '../../../assets/images/restaurants/mashya.jpg',
     },
   ],
   dishes: [
@@ -71,7 +71,7 @@ const mockData = {
       ],
       price: 88,
       tags: ['spicy'],
-      imgSrc: '../../assets/images/dishes/pad-ki-mao.jpg',
+      imgUrl: '../../assets/images/dishes/pad-ki-mao.jpg',
       isSignature: true,
     },
     {
@@ -84,7 +84,7 @@ const mockData = {
       ],
       price: 98,
       tags: [],
-      imgSrc: '../../assets/images/dishes/garbanzo.jpg',
+      imgUrl: '../../assets/images/dishes/garbanzo.jpg',
       isSignature: true,
     },
     {
@@ -97,7 +97,7 @@ const mockData = {
       ],
       price: 65,
       tags: ['vegan'],
-      imgSrc: '../../assets/images/dishes/pizza.jpg',
+      imgUrl: '../../assets/images/dishes/pizza.jpg',
       isSignature: true,
     },
   ],
