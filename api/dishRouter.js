@@ -66,4 +66,23 @@ router.post('/', async (req, res) => {
   }
 });
 
+// [PUT] - update dish
+router.put('/:id', async (req, res) => {
+  // TODO: change a restaurant
+  const { id } = req.params;
+  const data = req.body;
+  try {
+    if (!id) res.status(402).send('no dish selected');
+    if (!data) res.status(402).send('no data sent');
+
+    const updatedDish = await dishModel.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+
+    res.json(updatedDish);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
 module.exports = router;
