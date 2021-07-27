@@ -40,4 +40,22 @@ router.post('/', async (req, res) => {
   }
 });
 
+// [PUT] - update chef
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  try {
+    if (!id) res.status(402).send('no chef selected');
+    if (!data) res.status(402).send('no data sent');
+
+    const updatedChef = await chefModel.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+
+    res.json(updatedChef);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
 module.exports = router;
