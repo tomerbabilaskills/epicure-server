@@ -1,15 +1,19 @@
 const { Router } = require('express');
+const mongoose = require('mongoose');
 const dishModel = require('../models/dishModel');
+const restaurantModel = require('../models/restaurantModel');
 
 const router = Router();
+
+const { ObjectId } = mongoose.Types;
 
 // [GET] - all dishes
 router.get('/', async (req, res) => {
   try {
     const dishes = await dishModel.find({});
-    res.json(dishes);
+    return res.json(dishes);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
   }
 });
 
@@ -18,9 +22,47 @@ router.get('/:id', async (req, res) => {
   try {
     const dishId = req.params.id;
     const dish = await dishModel.findById(dishId);
-    res.json(dish);
+    return res.json(dish);
   } catch (error) {
-    res.status(500).send(error);
+    return res.status(500).send(error);
+  }
+});
+
+// [POST] - new dish
+router.post('/', async (req, res) => {
+  const { imgUrl, price, name, ingredients, tags, isSignature, restaurantId } =
+    req.body;
+  try {
+    const restaurant = ObjectId(restaurantId);
+
+    if (!imgUrl || !price || !name || !ingredients) {
+      return res
+        .status(402)
+        .send('should provide name, imgUrl, price and ingredients');
+    }
+
+    if (!(await restaurantModel.exists({ _id: restaurant }))) {
+      return res.status(402).send('restaurant is not exist');
+    }
+
+    const newDish = await dishModel.create({
+      name,
+      ingredients,
+      tags,
+      price,
+      imgUrl,
+      isSignature,
+      restaurant,
+    });
+
+    await restaurantModel.findOneAndUpdate(
+      { _id: restaurant },
+      { $push: { dishes: ObjectId(newDish.id) } }
+    );
+
+    return res.json(newDish);
+  } catch (error) {
+    return res.status(500).send(error);
   }
 });
 
