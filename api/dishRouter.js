@@ -85,4 +85,16 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// [DELETE] - delete dish
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await dishModel.findByIdAndDelete(id);
+
+    return res.send(`dish ${id} deleted successfully`);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
 module.exports = router;
