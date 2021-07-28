@@ -7,7 +7,6 @@ const chefSchema = new Schema({
   imgUrl: String,
   description: String,
   restaurants: [{ type: ObjectId, ref: 'Restaurant' }],
-  isChefOfTheWeek: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model('Chef', chefSchema);

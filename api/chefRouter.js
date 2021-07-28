@@ -3,10 +3,40 @@ const mongoose = require('mongoose');
 const chefModel = require('../models/chefModel');
 const dishModel = require('../models/dishModel');
 const restaurantModel = require('../models/restaurantModel');
+const chefOfTheWeekModel = require('../models/chefOfTheWeekModel');
 
 const router = Router();
 
 const { ObjectId } = mongoose.Types;
+
+/* chef of the week routes */
+
+// [GET] - chef of the week
+router.get('/chef-of-the-week', async (req, res) => {
+  try {
+    const chefOfTheWeek = await chefOfTheWeekModel.findOne({}).populate('chef');
+    return res.json(chefOfTheWeek);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+// [PUT] - update chef of the week
+router.put('/chef-of-the-week', async (req, res) => {
+  const { chefId } = req.body;
+  try {
+    const updatedChefOfTheWeek = await chefOfTheWeekModel.findOneAndUpdate(
+      {},
+      { chef: ObjectId(chefId) },
+      { new: true }
+    );
+    return res.json(updatedChefOfTheWeek);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+/* chef routes */
 
 // [GET] - all chefs
 router.get('/', async (req, res) => {
