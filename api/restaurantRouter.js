@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const mongoose = require('mongoose');
 const chefModel = require('../models/chefModel');
+const dishModel = require('../models/dishModel');
 const restaurantModel = require('../models/restaurantModel');
 
 const router = Router();
@@ -76,6 +77,19 @@ router.put('/:id', async (req, res) => {
     );
 
     res.json(updatedRestaurant);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+});
+
+// [DELETE] - delete restaurant
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await restaurantModel.findByIdAndDelete(id);
+    await dishModel.deleteMany({ restaurant: ObjectId(id) });
+
+    return res.send(`restaurant ${id} and its dishes deleted successfully`);
   } catch (error) {
     return res.status(500).send(error);
   }

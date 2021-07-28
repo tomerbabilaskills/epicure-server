@@ -69,13 +69,10 @@ router.delete('/:id', async (req, res) => {
   try {
     const deletedChef = await chefModel.findByIdAndDelete(id);
     const restaurantIds = deletedChef.restaurants;
-    console.log(restaurantIds);
     await restaurantModel.deleteMany({ chef: ObjectId(id) });
     await dishModel.deleteMany({ restaurant: { $in: restaurantIds } });
 
-    return res.send(
-      `chef ${id} and his restaurants and dishes deleted successfully`
-    );
+    return res.send(`chef ${id} and his references deleted successfully`);
   } catch (error) {
     return res.status(500).send(error);
   }
