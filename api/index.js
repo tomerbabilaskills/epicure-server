@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const chefRouter = require('./chef/chef.routes');
 const restaurantRouter = require('./restaurant/restaurant.routes');
-const dishRouter = require('./dishRouter');
+const dishRouter = require('./dish/dish.routes');
 const seedRouter = require('./seedRouter');
 
 const router = Router();

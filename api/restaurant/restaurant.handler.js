@@ -48,14 +48,18 @@ async function createRestaurant(chefId, data) {
   try {
     if (await chefModel.exists({ _id: chef })) {
       const newData = data;
-      newData.chef = ObjectId(chef);
+      newData.chef = chef;
+
       const newRestaurant = await restaurantModel.create(newData);
+
       await chefModel.findOneAndUpdate(
         { _id: chef },
         { $push: { restaurants: ObjectId(newRestaurant.id) } }
       );
+
       return newRestaurant;
     }
+    return;
   } catch (error) {
     console.log(error);
     throw error;
