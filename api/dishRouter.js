@@ -10,7 +10,30 @@ const { ObjectId } = mongoose.Types;
 // [GET] - all dishes
 router.get('/', async (req, res) => {
   try {
-    const dishes = await dishModel.find({});
+    const pipeline = [
+      { $match: { isSignature: true } },
+      {
+        $lookup: {
+          from: restaurantModel.collection.name,
+          localField: 'restaurant',
+          foreignField: '_id',
+          as: 'restaurant',
+        },
+      },
+      { $unwind: '$restaurant' },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          price: 1,
+          tags: 1,
+          description: '$ingredients',
+          imgUrl: 1,
+          restaurant: '$restaurant.name',
+        },
+      },
+    ];
+    const dishes = await dishModel.aggregate(pipeline);
     return res.json(dishes);
   } catch (error) {
     return res.status(500).send(error);

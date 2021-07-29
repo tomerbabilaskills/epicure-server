@@ -11,7 +11,27 @@ const { ObjectId } = mongoose.Types;
 // [GET] - all restaurants
 router.get('/', async (req, res) => {
   try {
-    const restaurants = await restaurantModel.find({});
+    const pipeline = [
+      { $match: { isPopular: true } },
+      {
+        $lookup: {
+          from: chefModel.collection.name,
+          localField: 'chef',
+          foreignField: '_id',
+          as: 'chef',
+        },
+      },
+      { $unwind: '$chef' },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          imgUrl: 1,
+          description: '$chef.name',
+        },
+      },
+    ];
+    const restaurants = await restaurantModel.aggregate(pipeline);
     res.json(restaurants);
   } catch (error) {
     res.status(500).send(error);

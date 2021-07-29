@@ -14,8 +14,40 @@ const { ObjectId } = mongoose.Types;
 // [GET] - chef of the week
 router.get('/chef-of-the-week', async (req, res) => {
   try {
-    const chefOfTheWeek = await chefOfTheWeekModel.findOne({}).populate('chef');
-    return res.json(chefOfTheWeek);
+    const pipeline = [
+      {
+        $lookup: {
+          from: chefModel.collection.name,
+          localField: 'chef',
+          foreignField: '_id',
+          as: 'chef',
+        },
+      },
+      { $unwind: '$chef' },
+      {
+        $lookup: {
+          from: restaurantModel.collection.name,
+          localField: 'chef.restaurants',
+          foreignField: '_id',
+          as: 'restaurants',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: '$chef.name',
+          description: '$chef.description',
+          imgUrl: '$chef.imgUrl',
+          restaurants: {
+            _id: 1,
+            name: 1,
+            imgUrl: 1,
+          },
+        },
+      },
+    ];
+    const chefOfTheWeek = await chefOfTheWeekModel.aggregate(pipeline);
+    return res.json(chefOfTheWeek[0]);
   } catch (error) {
     return res.status(500).send(error);
   }
