@@ -80,7 +80,11 @@ async function updateDish(id, data) {
 
 async function deleteDish(id) {
   try {
-    await dishModel.findByIdAndDelete(id);
+    const deletedDish = await dishModel.findByIdAndDelete(id);
+    const restaurantId = ObjectId(deletedDish.restaurant);
+    await restaurantModel.findByIdAndUpdate(restaurantId, {
+      $pullAll: { dishes: [ObjectId(id)] },
+    });
   } catch (error) {
     throw error;
   }
