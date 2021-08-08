@@ -9,6 +9,15 @@ async function getRestaurants(req, res) {
   }
 }
 
+async function getPopularRestaurants(req, res) {
+  try {
+    const response = await handler.getPopularRestaurants();
+    res.json(response);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+}
+
 async function getRestaurantById(req, res) {
   const restaurantId = req.params.id;
   try {
@@ -66,6 +75,7 @@ async function deleteRestaurant(req, res) {
 module.exports = {
   getRestaurants,
   getRestaurantById,
+  getPopularRestaurants,
   createRestaurant,
   updateRestaurant,
   deleteRestaurant,

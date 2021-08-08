@@ -8,7 +8,6 @@ const { ObjectId } = mongoose.Types;
 async function getRestaurants() {
   try {
     const pipeline = [
-      { $match: { isPopular: true } },
       {
         $lookup: {
           from: chefModel.collection.name,
@@ -38,6 +37,35 @@ async function getRestaurantById(id) {
   try {
     const restaurant = await restaurantModel.findById(id);
     return restaurant;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getPopularRestaurants() {
+  try {
+    const pipeline = [
+      { $match: { isPopular: true } },
+      {
+        $lookup: {
+          from: chefModel.collection.name,
+          localField: 'chef',
+          foreignField: '_id',
+          as: 'chef',
+        },
+      },
+      { $unwind: '$chef' },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          imgUrl: 1,
+          description: '$chef.name',
+        },
+      },
+    ];
+    const restaurants = await restaurantModel.aggregate(pipeline);
+    return restaurants;
   } catch (error) {
     throw error;
   }
@@ -95,6 +123,7 @@ async function deleteRestaurant(id) {
 module.exports = {
   getRestaurants,
   getRestaurantById,
+  getPopularRestaurants,
   createRestaurant,
   updateRestaurant,
   deleteRestaurant,
