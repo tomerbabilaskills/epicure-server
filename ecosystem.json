@@ -3,7 +3,11 @@
     {
       "name": "epicure",
       "script": "./index.js",
-      "env": {}
+      "env": {
+        "NODE_ENV": "staging",
+        "PORT": 3000,
+        "DB_URL": "mongodb+srv://tomerbabila:tomer123@cluster0.ccswr.mongodb.net/epicure?retryWrites=true&w=majority"
+      }
     }
   ],
   "deploy": {

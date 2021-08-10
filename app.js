@@ -14,8 +14,13 @@ const mongooseOptions = {
 app.use(express.json());
 app.use(cors());
 
+console.log(process.env.DB_URL);
+
 mongoose
-  .connect(process.env.DB_URL, mongooseOptions)
+  .connect(
+    'mongodb+srv://tomerbabila:tomer123@cluster0.ccswr.mongodb.net/epicure?retryWrites=true&w=majority',
+    mongooseOptions
+  )
   .then((result) => console.log('Connected to MongoDB'))
   .catch((error) => console.log(`Connection error: ${error.message}`));
 
