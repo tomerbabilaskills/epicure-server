@@ -1,0 +1,27 @@
+{
+  "apps": [
+    {
+      "name": "epicure",
+      "script": "./index.js",
+      "env": {}
+    }
+  ],
+  "deploy": {
+    "staging": {
+      "key": "~/.ssh/private.pem",
+      "user": "ubuntu",
+      "host": ["ec2-3-140-254-232.us-east-2.compute.amazonaws.com"],
+      "ref": "origin/develop",
+      "repo": "git@github.com:tomerbabilaskills/epicure-server.git",
+      "path": "/home/ubuntu/epicure/epicure-server",
+      "ssh_options": "StrictHostKeyChecking=no",
+      "post-deploy": "mkdir -p logs && npm i && pm2 reload ecosystem.json --env staging",
+      "pre-deploy-local": "echo 'Deploying code to servers'",
+      "env": {
+        "NODE_ENV": "staging",
+        "PORT": 3000,
+        "DB_URL": "mongodb+srv://tomerbabila:tomer123@cluster0.ccswr.mongodb.net/epicure?retryWrites=true&w=majority"
+      }
+    }
+  }
+}
